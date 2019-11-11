@@ -45,10 +45,10 @@ keep it aside of binary to load trained weights if you want.
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ### Training 
-![image00](demo0.png)
+![image00](demo2.png)
 
 ### Classification
-![image01](demo1.png)
+![image01](demo0.png)
 
 ### Testing
-![image02](demo2.png)
+![image02](demo1.png)
