@@ -5,18 +5,18 @@
 const static float dt = 1.0E-01f;
 
 // Utility CUDA kernel functions
-__device__ float step_function(float v)
+__device__ float activation_function(float x)
 {
-    return 1 / (1 + exp(-v));
+    return 1 / (1 + exp(-x));
 }
 
-__global__ void apply_step_function(float *input, float *output, const int N)
+__global__ void apply_activation_function(float *input, float *output, const int N)
 {
     const int pos = blockIdx.x * blockDim.x + threadIdx.x;
     const int size = blockDim.x * gridDim.x;
 
     for (int idx = N * pos / size; idx < N * (pos+1) / size; ++idx) {
-        output[idx] = step_function(input[idx]);
+        output[idx] = activation_function(input[idx]);
     }
 }
 
@@ -211,7 +211,7 @@ __global__ void bp_preact_s1(float d_preact[6][6][6], float d_output[6][6][6], f
         const int i2 = ((idx /= 6    ) % 6);
         const int i3 = ((idx /= 6    ) % 6);
 
-        const float o = step_function(preact[i1][i2][i3]);
+        const float o = activation_function(preact[i1][i2][i3]);
 
         d_preact[i1][i2][i3] = d_output[i1][i2][i3] * o * (1 - o);
     }
@@ -289,7 +289,7 @@ __global__ void bp_preact_c1(float d_preact[6][24][24], float d_output[6][24][24
         const int i2 = ((idx /= 6    ) % 24);
         const int i3 = ((idx /= 24    ) % 24);
 
-        const float o = step_function(preact[i1][i2][i3]);
+        const float o = activation_function(preact[i1][i2][i3]);
 
         d_preact[i1][i2][i3] = d_output[i1][i2][i3] * o * (1 - o);
     }
